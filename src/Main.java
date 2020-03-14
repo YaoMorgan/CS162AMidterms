@@ -44,7 +44,7 @@ public class Main {
 	 	    		SJF t = new SJF();
 	 	    		t.sjf(process, i+1);
 	 	    		break;
-//		 	    case "RR":
+		 	    case "RR":
 //	 	    	int numP = process.length;
 //	 	    	int bt[] = new int[numP];
 //	 	   		for(int l = 0; l < numP; l++) {
@@ -52,6 +52,7 @@ public class Main {
 //	 	   		}
 //	 	   		RR rr = new RR();
 //	     		rr.RR(rrTime);
+		 	    	break;
 	 	    }
 	    }
 	} 
