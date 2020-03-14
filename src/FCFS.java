@@ -1,4 +1,3 @@
-
 public class FCFS {
 	private int timeElapsed, cpuBurst;
 	private int[]  waitingTime, turnAround, responseTime;
@@ -22,8 +21,8 @@ public class FCFS {
 		}
 //		System.out.println("timeelapsed: " + timeElapsed);
 //		System.out.println("cpuburst: " + cpuBurst);
-		cpuUtil=(cpuBurst/timeElapsed)*100.0;
-		throughput=lines/timeElapsed;
+		cpuUtil=((double)cpuBurst/(double)timeElapsed)*100.0;
+		throughput=lines/(double)timeElapsed;
 		averageWaitingTime=getAverage(waitingTime);
 		averageTurnAround=getAverage(turnAround);
 		averageResponseTime=getAverage(responseTime);
@@ -33,18 +32,18 @@ public class FCFS {
 		for(int i=0; i<lines;i++) {
 			toPrint=toPrint + process[i][0]+ " " + process[i][2] + " " + process[i][1] + "X\n";
 		}
-		System.out.printf(toPrint + "Total time elapsed: %dns\nTotal CPU burst time: %dns\nCPU Utilization: %.0f\nThroughput: %.2f processes/ns\nWaiting times:\n"
+		System.out.printf(toPrint + "Total time elapsed: %dns\nTotal CPU burst time: %dns\nCPU Utilization: %.0f%%\nThroughput: %.3f processes/ns\nWaiting times:\n"
 				,timeElapsed, cpuBurst, cpuUtil, throughput);
 		for(int i=1; i<=lines; i++) {
-			System.out.printf("Process %d: %dns\n", i, waitingTime[i-1]);
+			System.out.printf(" Process %d: %dns\n", i, waitingTime[i-1]);
 		}
 		System.out.printf("Average Waiting time: %.1fns\nTurnaround times:\n", averageWaitingTime);
 		for(int i=1; i<=lines; i++) {
-			System.out.printf("Process %d: %dns\n", i, turnAround[i-1]);
+			System.out.printf(" Process %d: %dns\n", i, turnAround[i-1]);
 		}
 		System.out.printf("Average Turnaround time: %.1fns\nResponse times:\n", averageTurnAround);
 		for(int i=1; i<=lines; i++) {
-			System.out.printf("Process %d: %dns\n", i, responseTime[i-1]);
+			System.out.printf(" Process %d: %dns\n", i, responseTime[i-1]);
 		}
 		System.out.printf("Average Response time: %.1fns\n\n", averageResponseTime);
 		
@@ -57,5 +56,4 @@ public class FCFS {
 		}
 		return sum/array.length;
 	}
-		
 }
