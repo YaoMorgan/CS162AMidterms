@@ -18,6 +18,7 @@ public class FCFS {
 			for(int j=0; j<process[i][1]; j++) {
 				timeElapsed++; cpuBurst++; turnAround[i]++;
 			}
+			process[i][2]=i+1;
 		}
 //		System.out.println("timeelapsed: " + timeElapsed);
 //		System.out.println("cpuburst: " + cpuBurst);
