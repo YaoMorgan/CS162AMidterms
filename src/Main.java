@@ -62,6 +62,14 @@ public class Main {
 		 	   		System.out.println(i+1 + " RR");
 	     			rr.run(process, lines, rrTime);
 		 	    	break;
+		 	    case "SRTF":
+		 	    	SRTF srtf = new SRTF();
+		 	    	srtf.srtf(process, i+1);
+		 	    	break;
+		 	    case "P":
+		 	    	P p = new P();
+		 	    	p.p(process, i+1);
+		 	    	break;
 	 	    }
 	    }
 	} 
