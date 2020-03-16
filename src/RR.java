@@ -25,6 +25,10 @@ public class RR {
 				if(remainingBurst[j]==process[j][1] && process[j][0]<=timeElapsed) {
 					q.add(0,j);
 				}
+				if(q.isEmpty()==true && process[j][0]>timeElapsed) {
+					timeElapsed++;
+					done=false;
+				}
 			}
 			if(q.isEmpty()==false) {
 				int currentProcess=q.get(0);
