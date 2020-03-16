@@ -53,6 +53,14 @@ public class Main {
 //	 	   		RR rr = new RR();
 //	     		rr.RR(rrTime);
 		 	    	break;
+		 	    case "SRTF":
+		 	    	SRTF srtf = new SRTF();
+		 	    	srtf.srtf(process, i+1);
+		 	    	break;
+		 	    case "P":
+		 	    	P p = new P();
+		 	    	p.p(process, i+1);
+		 	    	break;
 	 	    }
 	    }
 	} 
