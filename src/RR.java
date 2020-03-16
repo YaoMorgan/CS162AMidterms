@@ -1,57 +1,107 @@
+import java.util.*;
+
 public class RR {
-	static void findWaitingTime(int numP, int[] bt, int[] wt, int rrTime) {
-		int curbt[] = new int[numP];
+	private int timeElapsed, cpuBurst;
+	private int[]  waitingTime, turnAround, responseTime;
+	private double throughput, cpuUtil, averageWaitingTime, averageTurnAround, averageResponseTime;
+	public void run(int[][] process, int lines, int rrTime) {
+		ArrayList<Integer> q = new ArrayList<>();
+		int[] waitingTime = new int[lines];
+		int[] turnAround = new int[lines];
+		int[] responseTime = new int[lines];
+		int[] remainingBurst=new int[lines];
+		boolean[] responded = new boolean[lines];
+		timeElapsed=0;
 		
-		//Copy burst times
-		for(int i = 0; i < numP; i++) {
-			curbt[i] = bt[i];
+		//setup
+		for(int i=0; i<lines; i++) {
+			remainingBurst[i]=process[i][1];
+			responded[i]=false;
 		}
 		
-		int counter = 0;	//timer
-		
 		while(true) {
-			boolean done = true;
-			// Traverse all processes one by one repeatedly
-			for(int i = 0; i < numP; i++) {
-				//If bt of a process is greater than 0 it needs to be processed
-				if(curbt[i] > 0) {
-					done = false;	//process is on-going
-					if(curbt[i] > rrTime) {
-						//increase time based on the rrTime
-						counter += rrTime;
-						//decrease bt of current process by rrTime
-						curbt[i] -= rrTime;
+			boolean done=true;
+			for(int j=0; j<lines; j++) {
+				if(remainingBurst[j]==process[j][1] && process[j][0]<=timeElapsed) {
+					q.add(0,j);
+				}
+			}
+			if(q.isEmpty()==false) {
+				int currentProcess=q.get(0);
+				if(remainingBurst[currentProcess]>0 && process[currentProcess][0]<=timeElapsed) {
+					done=false;
+					if(remainingBurst[currentProcess]>rrTime) {
+						if(responded[currentProcess]==false) {
+							responseTime[q.get(0)]=timeElapsed-process[currentProcess][0];
+							responded[currentProcess]=true;
+						}
+						System.out.print(timeElapsed + " ");
+						
+						//add the given time and reduce remaining
+						timeElapsed+=rrTime;
+						remainingBurst[currentProcess]-=rrTime;
+						
+						//System.out.printf("Process%d switched at %dns\n",process[i][3],timeElapsed);
+						
+						System.out.print(process[currentProcess][3] + " ");
+						System.out.println(rrTime);
+						q.add(currentProcess);
+						q.remove(0);
 					}
-					// If bt is less than or equal to rrTime, it's the last cycle of the process
-					else { 
-						//Increase time based on how long the process is
-						counter += curbt[i];
-						//wt = current time - time used by the process
-						wt[i] = counter - bt[i];
-						//Make bt 0 after full execution
-						curbt[i] = 0;
+					else {
+						if(responded[currentProcess]==false) {
+							responseTime[q.get(0)]=timeElapsed-process[currentProcess][0];
+							responded[currentProcess]=true;
+						}
+						System.out.print(timeElapsed + " ");
+						//add the remaining time
+						timeElapsed+=remainingBurst[currentProcess];
+						
+						System.out.print(process[currentProcess][3] + " ");
+						System.out.println(remainingBurst[currentProcess]+ "X");
+						
+						waitingTime[currentProcess]=timeElapsed-process[currentProcess][0]-process[currentProcess][1];
+						remainingBurst[currentProcess]=0;
+						q.remove(0);
 					}
 				}
 			}
-			
-			if(done == true) {
+			if(done==true)
 				break;
-			}
 		}
-	}
-	
-	static void findTurnAroundTime(int n, int[] bt, int[] wt, int[] tat) {
-		//tat = bt + wt
-		for(int i = 0; i < n; i++) {
-			tat[i] = bt[i] + wt[i];
+		//computations
+		for(int i=0; i<lines; i++) {
+			turnAround[i]=process[i][1] + waitingTime[i];
 		}
-	}
-	
-	static void findAveTime(int numP, int[] bt, int rrTime) {
+		cpuBurst=timeElapsed;
+		cpuUtil=((double)cpuBurst/(double)timeElapsed)*100.0;
+		throughput=lines/(double)timeElapsed;
+		averageWaitingTime=getAverage(waitingTime);
+		averageTurnAround=getAverage(turnAround);
+		averageResponseTime=getAverage(responseTime);
 		
+		//printer
+		String toPrint="";
+		System.out.printf(toPrint + "Total time elapsed: %dns\nTotal CPU burst time: %dns\nCPU Utilization: %.0f%%\nThroughput: %.2f processes/ns\nWaiting times:\n"
+		,timeElapsed, cpuBurst, cpuUtil, throughput);
+		for(int i=1; i<=lines; i++) {
+			System.out.printf(" Process %d: %dns\n", i, waitingTime[i-1]);
+		}
+		System.out.printf("Average Waiting time: %.2fns\nTurnaround times:\n", averageWaitingTime);
+		for(int i=1; i<=lines; i++) {
+			System.out.printf(" Process %d: %dns\n", i, turnAround[i-1]);
+		}
+		System.out.printf("Average Turnaround time: %.2fns\nResponse times:\n", averageTurnAround);
+		for(int i=1; i<=lines; i++) {
+			System.out.printf(" Process %d: %dns\n", i, responseTime[i-1]);
+		}
+		System.out.printf("Average Response time: %.2fns\n\n", averageResponseTime);
 	}
-	
-	static void RR(int rrTime) {
-		
+	private double getAverage(int[] array) {
+		int sum = 0;
+		for(int i=0;i<array.length;i++) {
+			sum+=array[i]; 
+		}
+		return sum/array.length;
 	}
 }

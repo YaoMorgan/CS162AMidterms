@@ -1,6 +1,5 @@
 public class FCFS {
 	private int timeElapsed, cpuBurst;
-	private int[]  waitingTime, turnAround, responseTime;
 	private double throughput, cpuUtil, averageWaitingTime, averageTurnAround, averageResponseTime;
 	public void run(int[][] process,int lines) {
 		int[] waitingTime = new int[lines];
@@ -19,8 +18,6 @@ public class FCFS {
 				timeElapsed++; cpuBurst++; turnAround[i]++;
 			}
 		}
-//		System.out.println("timeelapsed: " + timeElapsed);
-//		System.out.println("cpuburst: " + cpuBurst);
 		cpuUtil=((double)cpuBurst/(double)timeElapsed)*100.0;
 		throughput=lines/(double)timeElapsed;
 		averageWaitingTime=getAverage(waitingTime);
@@ -28,9 +25,8 @@ public class FCFS {
 		averageResponseTime=getAverage(responseTime);
 	//printer
 		String toPrint="";
-		System.out.println(lines + " FCFS");
 		for(int i=0; i<lines;i++) {
-			toPrint=toPrint + process[i][0]+ " " + process[i][2] + " " + process[i][1] + "X\n";
+			toPrint=toPrint + process[i][0]+ " " + process[i][3] + " " + process[i][1] + "X\n";
 		}
 		System.out.printf(toPrint + "Total time elapsed: %dns\nTotal CPU burst time: %dns\nCPU Utilization: %.0f%%\nThroughput: %.3f processes/ns\nWaiting times:\n"
 				,timeElapsed, cpuBurst, cpuUtil, throughput);
