@@ -10,10 +10,9 @@ public class SRTF {
 		int st[] = new int[numP];	//start time
 		int rt[] = new int[numP];	//remaining time
 		int res[] = new int[numP]; 	//response time
+		int rok[] = new int[numP];
 		int lrt[] = new int[numP];	//last remaining time
 		int comp[] = new int[numP];	//completion status
-		int lp[] = new int[3];	//last printed
-		boolean printed[] = new boolean[numP];
 		String bts[] = new String[numP];  //add X to end of finished process bt
 		
 		int start = 0;
@@ -23,12 +22,10 @@ public class SRTF {
 		boolean check = false; //checks if a process arrives
 		int current = 0; //index of process with shortest remaining time
 		int min = Integer.MAX_VALUE; //process with least bt
-		int cthold = 0;
 		int ihold = 0;
-		int hold = 0;
 		boolean status = false;
 		
-		System.out.println(num + " SJF");
+		System.out.println(num + " SRTF");
 		
 		for(int i = 0; i < numP; i++) {
 			at[i] = process[i][0];
@@ -37,21 +34,37 @@ public class SRTF {
 			bts[i] = Integer.toString(process[i][1]);
 			pid[i] = i+1;
 			comp[i] = 0;
-			printed[i] = false;
+			rok[i] = 0;
 		}
 		
-		//Check if number of process is equal to processes done
-		//End loop if all processes are done.
-		while(total != numP) {
+		while(true) {
+			
+			//Check if number of process is equal to processes done
+			//End loop if all processes are done.
+			if(total == numP) {	
+				break;			
+			}
+			
 			for(int i = 0; i < numP; i++) {
 				//Check which process arrived,
 				//has least burst time.
-				if((at[i] <= start) && (rt[i] < min) && (rt[i] > 0)) {
-					min = rt[i];
-					current = i;
-					check = true;
-					ct[i] = start;
-					lrt[i] = rt[i];
+				if((at[i] <= start) && (rt[i] <= min) && (rt[i] > 0)) {
+					if(rt[i] == min) {
+						if(pid[current] > pid[i]) {
+							min = rt[i];
+							current = i;
+							check = true;
+							ct[i] = start;
+							lrt[i] = rt[i];
+						}
+					} else {
+						min = rt[i];
+						current = i;
+						check = true;
+						ct[i] = start;
+						lrt[i] = rt[i];
+					}
+
 				}
 			}
 			
@@ -64,8 +77,6 @@ public class SRTF {
 			//reduce remaining time of shortest process
 			rt[current]--;
 			
-			hold = rt[current];
-			
 			//update shortest time
 			min = rt[current];
 			if(min == 0) {
@@ -73,7 +84,7 @@ public class SRTF {
 			}
 			
 			//if process is complete, do this
-			if(hold == 0) {
+			if(rt[current] == 0) {
 				check = false;
 				
 				//final time = start + 1;
@@ -85,33 +96,34 @@ public class SRTF {
 					wt[current] = 0;
 				}
 				
-				System.out.println(ct[current] + " " + (current+1) + " " + (lrt[current] - rt[current]) + "X");
-				lp[0] = ct[current];
-				lp[1] = current+1;
-				lp[2] = lrt[current] - rt[current];
-//				printed[current] = true;
+				comp[current] = 1;
 				total++;
 			}
+
 			
-//			if (hold != 0) {
-				if(lp[0] != ct[current] && lp[1] != current+1 && lp[2] != (lrt[current] - rt[current])) {
+			if(ihold != current && (lrt[ihold] - rt[ihold]) > 0) {
+				if(comp[ihold] == 1) {
+					System.out.println(ct[ihold] + " " + (ihold+1) + " " + (lrt[ihold] - rt[ihold]) + "X");
+					
+				} else {
 					System.out.println(ct[ihold] + " " + (ihold+1) + " " + (lrt[ihold] - rt[ihold]));
-					lp[0] = ct[current];
-					lp[1] = current+1;
-					lp[2] = lrt[current] - rt[current];
 				}
-//				if(printed[current] == false) {
-//					printed[ihold] = true;
-//				}
-//			}
+			}
 			
-//			System.out.println(ct[current] + " " + (current+1) + " " + (lrt[current] - rt[current]));
+			if(rok[ihold] == 0) {
+				System.out.println("current time" + ct[ihold]);
+				System.out.println("arrival time" + at[ihold]);
+				res[ihold] = ct[ihold] - at[ihold];
+				rok[ihold] = 1;
+			}
 			
 			ihold = current;
-			cthold = ct[current];
 			
 			start++;
 		}
+		
+		System.out.println(ct[ihold] + " " + (ihold+1) + " " + (lrt[ihold] - rt[ihold]) + "X");
+		res[ihold] = ct[ihold] - at[ihold];
 		
 		int tbt = 0; //total burst time
 		float awt = 0; //average wait time
@@ -137,7 +149,7 @@ public class SRTF {
 			System.out.println(" Process " + (i+1) + ": " + wt[pid[i]-1]);
 		}
 		awt = awt/(float)numP;
-		System.out.println("Average waiting time: " + (float) awt + "ns");
+		System.out.printf("Average waiting time: %.2fns \n",awt);
 		
 		System.out.println("Turnaround times:");
 		for(int i = 0; i < numP; i++) {
@@ -145,7 +157,7 @@ public class SRTF {
 			System.out.println(" Process " + (i+1) + ": " + tat[pid[i]-1]);
 		}
 		atat = atat/numP;
-		System.out.println("Average turnaround time: " + atat + "ns");
+		System.out.printf("Average turnaround time: %.2fns \n",atat);
 		
 		System.out.println("Response times:");
 		for(int i = 0; i < numP; i++) {
@@ -153,7 +165,7 @@ public class SRTF {
 			System.out.println(" Process " + (i+1) + ": " + res[pid[i]-1]);
 		}
 		art = art/numP;
-		System.out.println("Average response time: " + art + "ns");
+		System.out.printf("Average response time: %.2fns \n",art);
 	}
 
 }
