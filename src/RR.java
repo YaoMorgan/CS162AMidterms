@@ -76,9 +76,9 @@ public class RR {
 		cpuBurst=timeElapsed;
 		cpuUtil=((double)cpuBurst/(double)timeElapsed)*100.0;
 		throughput=lines/(double)timeElapsed;
-		averageWaitingTime=getAverage(waitingTime);
-		averageTurnAround=getAverage(turnAround);
-		averageResponseTime=getAverage(responseTime);
+		averageWaitingTime=(double)getAverage(waitingTime);
+		averageTurnAround=(double)getAverage(turnAround);
+		averageResponseTime=(double)getAverage(responseTime);
 		
 		//printer
 		String toPrint="";
@@ -98,7 +98,7 @@ public class RR {
 		System.out.printf("Average Response time: %.2fns\n\n", averageResponseTime);
 	}
 	private double getAverage(int[] array) {
-		int sum = 0;
+		double sum = 0;
 		for(int i=0;i<array.length;i++) {
 			sum+=array[i]; 
 		}
