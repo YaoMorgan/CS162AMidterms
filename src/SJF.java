@@ -86,7 +86,7 @@ public class SJF {
 		System.out.println("Waiting times:");
 		for(int i = 0; i < numP; i++) {
 			awt += wt[pid[i]-1];
-			System.out.println(" Process " + (i+1) + ": " + wt[pid[i]-1]);
+			System.out.println(" Process " + (i+1) + ": " + wt[pid[i]-1]+ "ns");
 		}
 		awt = awt/numP;
 		System.out.println("Average waiting time: " + awt + "ns");
@@ -94,7 +94,7 @@ public class SJF {
 		System.out.println("Turnaround times:");
 		for(int i = 0; i < numP; i++) {
 			atat += tat[pid[i]-1];
-			System.out.println(" Process " + (i+1) + ": " + tat[pid[i]-1]);
+			System.out.println(" Process " + (i+1) + ": " + tat[pid[i]-1]+"ns");
 		}
 		atat = atat/numP;
 		System.out.println("Average turnaround time: " + atat + "ns");
@@ -102,7 +102,7 @@ public class SJF {
 		System.out.println("Response times:");
 		for(int i = 0; i < numP; i++) {
 			art += rt[pid[i]-1];
-			System.out.println(" Process " + (i+1) + ": " + rt[pid[i]-1]);
+			System.out.println(" Process " + (i+1) + ": " + rt[pid[i]-1] +"ns");
 		}
 		art = art/numP;
 		System.out.println("Average response time: " + art + "ns");

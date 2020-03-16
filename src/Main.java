@@ -38,6 +38,7 @@ public class Main {
 	 					}
 	 				});
 	 				FCFS func = new FCFS();
+	 				System.out.println(i+1 + " FCFS");
 	 				func.run(process,lines);
 	 				break;
 	 	    	case "SJF":
@@ -45,12 +46,20 @@ public class Main {
 	 	    		t.sjf(process, i+1);
 	 	    		break;
 		 	    case "RR":
-	 	    	int numP = process.length;
-	 	    	int bt[] = new int[numP];
-	 	   		for(int l = 0; l < numP; l++) {
-	 	   			bt[l] = process[l][1];
-	 	   		}
-	 	   		RR rr = new RR();
+		 	    	java.util.Arrays.sort(process, new java.util.Comparator<int[]>() {
+	 					@Override
+	 					public int compare(int[] a, int[] b) {
+	 						return Double.compare(a[0], b[0]);
+	 					}
+	 				});
+		 	    	
+		 	    	int numP = process.length;
+		 	    	int bt[] = new int[numP];
+		 	   		for(int l = 0; l < numP; l++) {
+		 	   			bt[l] = process[l][1];
+		 	   		}
+		 	   		RR rr = new RR();
+		 	   		System.out.println(i+1 + " RR");
 	     			rr.run(process, lines, rrTime);
 		 	    	break;
 	 	    }
