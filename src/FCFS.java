@@ -17,6 +17,7 @@ public class FCFS {
 			for(int j=0; j<process[i][1]; j++) {
 				timeElapsed++; cpuBurst++; turnAround[i]++;
 			}
+			process[i][2]=i+1;
 		}
 		cpuUtil=((double)cpuBurst/(double)timeElapsed)*100.0;
 		throughput=lines/(double)timeElapsed;
