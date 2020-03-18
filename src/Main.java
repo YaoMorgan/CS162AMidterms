@@ -1,4 +1,6 @@
 import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
@@ -25,7 +27,7 @@ public class Main {
 	    			//System.out.print(process[j-1][k] + " ");
 	    		}
 	    	}
-	    	for(int v =1;v<=lines;v++) {
+	    	for(int v=1;v<=lines;v++) {
     			process[v-1][3]=v;
     		}
 	    	
@@ -55,8 +57,14 @@ public class Main {
 		 	    	srtf.srtf(process, i+1);
 		 	    	break;
 		 	    case "P":
+		 	    	Arrays.sort(process, new Comparator<int[]>(){
+		 		        public int compare(int[] o1, int[] o2){
+		 		            return Integer.valueOf(o1[2]).compareTo(Integer.valueOf(o2[2]));
+		 		        }
+		 		    });
 		 	    	P p = new P();
-		 	    	p.p(process, i+1);
+		 	    	System.out.println(i+1 + " P");
+		 	    	p.run(process, lines);
 		 	    	break;
 	 	    }
 	    }
